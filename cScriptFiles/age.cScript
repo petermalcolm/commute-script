@@ -1,0 +1,8 @@
+[set]'myAge'(8)
+[set]'votingAge'(18)
+[set]'canVote'<'myAge'{!<}'votingAge'>
+[if]'canIVote?'<'canVote'{=}<true>>
+[page.write]"I can vote!"
+[else]
+[page.write]"I cant I Vote"
+[end]'canIVote?'
