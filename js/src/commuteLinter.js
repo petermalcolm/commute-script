@@ -17,10 +17,11 @@ let line = ''
 let pageRegEx = /\[page\.(write|button)\]\"[^\"]*\"/
 let endIfRegEx = /\[end\](\'[^\']+\')/
 let ifRegEx = /\[if\](\'[^\']+\')(<.+>)/
-let setRegEx = /^\[set\]\'\w+\'(.+)$/
+let setRegEx = /^\[set\](\'\w+\')(.+)$/
 let elseRegEx = /\[else\]/
 let boolean = /<(\d|\'\w+\')\{[=<>]\}(\d|\'\w+\')>/
 let functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
+let returnRegEx = /\[return\](.+)/
 let stack = []
 let result = []
 while(counter < lines.length) {
@@ -62,7 +63,14 @@ while(counter < lines.length) {
                         if(null !== result) {
                             console.log(`line ${counter} is valid and it is a pageRegEx`)
                         } else {
-                             console.log(`error on line ${counter}`)
+                            result = returnRegEx.exec(line)
+                        if(null !== result) {
+                            if(!stack || stack[stack.length-2] !== 'if' && stack[stack.length-1] === result[1]) {
+                            console.log(`line ${counter} is valid and it is a returnRegEx`)
+                            }
+                        } else {
+                             
+                        } 
                         }
                     }
                 }

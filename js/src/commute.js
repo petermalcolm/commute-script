@@ -6,9 +6,15 @@ let test3 = `<2{}0>`; // not valid
 const booleanComparisons = /<(\d+|\'\w+\')\{\!?[>=<]\}(\d+|\'\w+\')>/; //  ep. <2{=}2>
 const resevedWord = /\[(var|while|end|page\.write)\]/
 const string = /\"\w+\"/
-const parenthases = /\(\w+\)/ 
+const parenthases = /\(\w+\)/
 let symbols = {}
 const names = /\'\w+\'/
 symbols['a']
 
-
+/* /<(\d+|\'\w+\')\{\!?[>=<]\}(\d+|\'\w+\')>/
+*  /\[(var|while|end|page\.write)\]/
+*  /\"\w+\"/
+*  /\(\d+\)/
+*  /(\'\w+\')/
+*  /\|.+\|/
+*/
