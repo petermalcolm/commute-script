@@ -2,6 +2,7 @@ let multiLine = `[set]'myAge'(8)
 tyvurtgfc
 [end]'qwert'|qwer| 
 er257e7u36rs
+[bad-word]
 [set]'votingAge'(18)
 [set]'canVote'<'myAge'{!<}'votingAge'>
 [if]'canIVote?'<'canVote'{=}<true>>
@@ -22,63 +23,19 @@ let elseRegEx = /\[else\]/
 let boolean = /<(\d|\'\w+\')\{[=<>]\}(\d|\'\w+\')>/
 let functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
 let returnRegEx = /\[return\](.+)/
+let reservedWord = /\[(.+)\]/
 let stack = []
 let result = []
 while(counter < lines.length) {
     line = lines[counter]
-    result = setRegEx.exec(line)
+    result = reservedWord.exec(line)
     if(null !== result) {
-        console.log(`line ${counter} is valid and it is a setRegEx`)
-    } else {
-        result = ifRegEx.exec(line)
-        if(null !== result) {
-            console.log(`line ${counter} is valid and it is a ifRegEx`)
-            stack.push('if')
-            stack.push(result[1])
-        } else {
-            result = elseRegEx.exec(line)
-            if(null !== result) {
-                console.log(`line ${counter} is valid and it is a elseRegEx`)
-                if(!stack || (stack[stack.length-2] !== 'if' && stack[stack.length-1] === result[1])) { 
-                    console.log(`but there's no if`)
-                }
-            } else {
-                result = endIfRegEx.exec(line)
-                if(null !== result) {
-                    console.log(`line ${counter} is valid and it is a endIfRegEx`)
-                    if(!stack || stack[stack.length-2] !== 'if' && stack[stack.length-1] !== result[1]) {
-                        console.log(`but there's no if`)
-                        stack.pop()
-                    } else {
-                        stack.pop()
-                    }
-                } else {
-                    result = functionRegEx.exec(line)
-                    if(null !== result) {
-                    console.log(`line ${counter} is valid and it is a functionRegEx`)
-                    stack.push('function')
-                    stack.push(result[1])
-                    } else {
-                        result = pageRegEx.exec(line)
-                        if(null !== result) {
-                            console.log(`line ${counter} is valid and it is a pageRegEx`)
-                        } else {
-                            result = returnRegEx.exec(line)
-                        if(null !== result) {
-                            if(!stack || stack[stack.length-2] !== 'if' && stack[stack.length-1] === result[1]) {
-                            console.log(`line ${counter} is valid and it is a returnRegEx`)
-                            }
-                        } else {
-                            if(null !== result) {
-                                if(!stack || stack[stack.length-2] !== 'if' && stack[stack.length-1] === result[1]) {
-                                    console.log(`line ${counter} is valid and it is a returnRegEx`)
-                                }
-                            }
-                        }
-                        }
-                    }
-                }
-            }
+        console.log(`line ${counter} is valid and it is a reserved word ${result[1]}`)
+        const validator = validators.filter((v) => {
+            return result[1] === v.reservedWord
+        })
+        if(validator.length === 0) {
+            console.log('bad word')
         }
     }
     counter += 1   
