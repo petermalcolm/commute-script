@@ -1,10 +1,10 @@
-let multiLine = `[set]'myAge'(8)
+let multiLine = `[set]'myAge'|is actually 9, but we will say it is|(8)
 tyvurtgfc
 [end]'qwert'|qwer| 
 er257e7u36rs
 [bad-word]
-[set]'votingAge'(18)
-[set]'canVote'<'myAge'{!<}'votingAge'>
+[set]|I love peanut butter|'votingAge'(18)
+[set]|acoally cucumbers|'canVote'<'myAge'{!<}'votingAge'>
 [if]'canIVote?'<'canVote'{=}<true>>
 [page.write]|whd|"I can vote!"
 [else]
@@ -15,20 +15,21 @@ let lines = multiLine.split("\n")
 console.log(lines)
 let counter = 0
 let line = ''
-let pageRegEx = /\[page\.(write|button)\]\"[^\"]*\"/
-let endIfRegEx = /\[end\](\'[^\']+\')/
-let ifRegEx = /\[if\](\'[^\']+\')(<.+>)/
-let setRegEx = /^\[set\](\'\w+\')(.+)$/
-let elseRegEx = /\[else\]/
-let boolean = /<(\d|\'\w+\')\{[=<>]\}(\d|\'\w+\')>/
-let functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
-let returnRegEx = /\[return\](.+)/
-let reservedWord = /\[(.+)\]/
+const pageRegEx = /\[page\.(write|button)\]\"[^\"]*\"/
+const endIfRegEx = /\[end\](\'[^\']+\')/
+const ifRegEx = /\[if\](\'[^\']+\')(<.+>)/
+const setRegEx = /^\[set\](\'\w+\')(.+)$/
+const elseRegEx = /\[else\]/
+const boolean = /<(\d|\'\w+\')\{[=<>]\}(\d|\'\w+\')>/
+const functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
+const returnRegEx = /\[return\](.+)/
+const reservedWordRegex = /\[(.+)\]/
 let stack = []
 let result = []
+let symbolTable = {}
 while(counter < lines.length) {
     line = lines[counter]
-    result = reservedWord.exec(line)
+    result = reservedWordRegex.exec(line)
     if(null !== result) {
         console.log(`line ${counter} is valid and it is a reserved word ${result[1]}`)
         const validator = validators.filter((v) => {
@@ -36,6 +37,9 @@ while(counter < lines.length) {
         })
         if(validator.length === 0) {
             console.log('bad word')
+        } else {
+            // execute the validator function with line (stripped of comments)
+            validator[0].FUNCTION(stack, line.replaceAll(/\|.*?\|/g,''), symbolTable)
         }
     }
     counter += 1   
