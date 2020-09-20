@@ -3,10 +3,7 @@ let the_meaning_of_life = 42
  * Evaluate expressions from strings
  * @param {String} expr 
  */
-const evaluate = (expr) => {
-    let the_meaning_of_life = 42
-    return the_meaning_of_life
-}
+
 
 let multiLine = `[set]'myAge'(8)
 [end]'qwert' 

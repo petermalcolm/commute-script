@@ -1,6 +1,7 @@
 let multiLine = `[set]'myAge'|is actually 9, but we will say it is|(8)
 tyvurtgfc
-[end]'qwert'|qwer| 
+[end]'qwert'|qwer|
+[set]"cucumber"(3)  
 er257e7u36rs
 [bad-word]
 [set]|I love peanut butter|'votingAge'(18)
@@ -19,9 +20,9 @@ const pageRegEx = /\[page\.(write|button)\]\"[^\"]*\"/
 const endIfRegEx = /\[end\](\'[^\']+\')/
 const ifRegEx = /\[if\](\'[^\']+\')(<.+>)/
 const setRegEx = /^\[set\](\'\w+\')(.+)$/
+const functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
 const elseRegEx = /\[else\]/
 const boolean = /<(\d|\'\w+\')\{[=<>]\}(\d|\'\w+\')>/
-const functionRegEx = /^\[function\](\'[^\']*\')(\{[^\}]*)\}$/
 const returnRegEx = /\[return\](.+)/
 const reservedWordRegex = /\[(.+)\]/
 let stack = []
@@ -34,12 +35,12 @@ while(counter < lines.length) {
         console.log(`line ${counter} is valid and it is a reserved word ${result[1]}`)
         const validator = validators.filter((v) => {
             return result[1] === v.reservedWord
-        })
+        }) 
         if(validator.length === 0) {
             console.log('bad word')
         } else {
             // execute the validator function with line (stripped of comments)
-            validator[0].FUNCTION(stack, line.replaceAll(/\|.*?\|/g,''), symbolTable)
+            validator[0].FUNCTION(stack, line.replace(/\|.*?\|/g,''), symbolTable)
         }
     }
     counter += 1   

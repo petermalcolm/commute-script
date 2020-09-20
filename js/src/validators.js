@@ -1,10 +1,13 @@
 const validators = [
     {reservedWord : 'set', FUNCTION : (stack, line, symbols) => {
         // [set]'fwt'<(3){>}(2)> 
-        const variable = /\'(.*?)\'/.exec(line)[1]
-        const value = line.replace(/\[.*\]/,'').replace(/\'.*?\'/,'')
-        symbols[variable] = value
-        console.log(symbols)
+        try {
+            const variable = /\'(.*?)\'/.exec(line)[1]
+            const value = line.replace(/\[.*\]/,'').replace(/\'.*?\'/,'')
+            symbols[variable] = value
+        } catch(err) {
+            console.error(`could not set variable to value on line \n ${line}`)
+        }
     }},
     {reservedWord : 'page', FUNCTION : (stack, line, symbols) => {}},
     {reservedWord : 'if', FUNCTION : (stack, line, symbols) => {}},
